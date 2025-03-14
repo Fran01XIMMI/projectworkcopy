@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Excellent Bank Admin - Search Clients</title>
+            <style> /* Global Styles */
+    :root {
+        --primary-color: #1a3b5d;
+        --secondary-color: #2d6187;
+        --accent-color: #e4a013;
+        --text-color: #333;
+        --light-text: #f8f9fa;
+        --border-color: #dee2e6;
+        --success-color: #28a745;
+        --danger-color: #dc3545;
+        --warning-color: #ffc107;
+        --info-color: #17a2b8;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Helvetica, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: #f5f7fa;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--secondary-color);
+    }
+
+    a:hover {
+        color: var(--primary-color);
+    }
+
+    /* Header Styles */
+    .header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-icon {
+        font-size: 2rem;
+        margin-right: 10px;
+        color: var(--accent-color);
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .system-time {
+        font-size: 0.9rem;
+        color: #ddd;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .logout-btn {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        transition: background-color 0.3s;
+    }
+
+    .logout-btn:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    /* Main Content */
+    .main-content {
+        flex: 1;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 140px);
+    }
+
+    .login-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 450px;
+        padding: 2rem;
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .login-header h2 {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .login-header p {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .login-form .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .login-form label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--primary-color);
+    }
+
+    .login-form input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+
+    .login-form input:focus {
+        border-color: var(--secondary-color);
+        outline: none;
+    }
+
+    .form-actions {
+        margin-top: 2rem;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--secondary-color);
+    }
+
+    .btn-danger {
+        background-color: var(--danger-color);
+        color: white;
+        width: 100%;
+        font-size: 1rem;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .form-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .forgot-password {
+        color: var(--secondary-color);
+    }
+
+    /* Alerts */
+    .alert {
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+
+    /* Navigation */
+    .main-nav {
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .main-nav ul {
+        list-style: none;
+        display: flex;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .main-nav li {
+        position: relative;
+    }
+
+    .main-nav a {
+        display: block;
+        padding: 1rem 1.5rem;
+        color: var(--text-color);
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .main-nav a i {
+        margin-right: 0.5rem;
+    }
+
+    .main-nav a:hover {
+        background-color: #f8f9fa;
+        color: var(--primary-color);
+    }
+
+    .main-nav .active a {
+        color: var(--primary-color);
+        border-bottom: 3px solid var(--primary-color);
+    }
+
+    /* Dashboard Styles */
+    .dashboard h2 {
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+    }
+
+    .dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .stat-icon {
+        background-color: rgba(26, 59, 93, 0.1);
+        color: var(--primary-color);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+
+    .stat-content h3 {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 0.3rem;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .stat-period {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+    .dashboard-tables {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .recent-activity {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem;
+    }
+
+    .recent-activity h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table th, table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    table th {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .status-complete {
+        background-color: rgba(40, 167, 69, 0.1);
+        color: var(--success-color);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+
+    .status-pending {
+        background-color: rgba(255, 193, 7, 0.1);
+        color: var(--warning-color);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+
+    /* Footer Styles */
+    .footer {
+        background-color: var(--primary-color);
+        color: #ddd;
+        padding: 1.5rem 2rem;
+        margin-top: auto;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .footer-section {
+        font-size: 0.9rem;
+    }
+
+    .footer-section.links a {
+        color: #ddd;
+        margin: 0 0.25rem;
+    }
+
+    .footer-section.links a:hover {
+        color: white;
+    }
+
+    /* Container Styles */
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px; /* Space between columns */
+        margin-bottom: 20px; /* Space between sections */
+        color: var(--primary-color); /* Text color */
+        background-color: white; /* White background */
+        border-radius: 15px; /* Rounded corners */
+        padding: 20px; /* Inner spacing */
+        width: 90%; /* Increase width to 90% of its parent */
+        max-width: 1200px; /* Maximum width for larger screens */
+        margin-left: auto; /* Center the container */
+        margin-right: auto; /* Center the container */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+
+    }
+
+    .filter-group {
+        margin-bottom: 15px;
+    }
+
+    .section {
+        margin-bottom: 20px; /* Adds space between each section */
+    }
+
+    label {
+        display: block; /* Makes the label take up the full width, forcing the select to go to the next line */
+        margin-bottom: 5px; /* Adds a small space between the label and the dropdown */
+    }
+
+    select {
+            width: 100%; /* Makes the dropdown take up the full width of its container */
+            padding: 5px; /* Adds some padding inside the dropdown */
+    }
+
+    /* Basic reset of search clients */
+
+    form {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input[type="number"], select, input[type="radio"] {
+        margin-bottom: 10px;
+    }
+
+    input[type="number"], select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .radio-group {
+        margin-bottom: 15px;
+    }
+
+    .radio-label {
+        display: inline-block;
+        margin-right: 15px;
+        font-weight: normal;
+    }
+
+    .search-section {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .search-section-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #2c3e50;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+
+    .hidden {
+        display: none;
+    }
+
+    /* Section Title Styles */
+    .section-title {
+        margin: 0; /* Remove default margin */
+        font-size: 15px; /* Increase font size */
+        color: var(--primary-color); /* Use primary color for the title */
+        width: 100%; /* Increase width to 90% of its parent */
+    }
+
+    .col {
+        flex: 1; /* Each column takes equal space */
+        min-width: 50px; /* Minimum width for responsiveness */
+    }
+
+    /* Form Group Styles */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .header {
+            flex-direction: column;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .header-right {
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .main-nav ul {
+            flex-direction: column;
+        }
+
+        .dashboard-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .footer-content {
+            flex-direction: column;
+            text-align: center;
+        }
+    } </style>
+                <script>
+                    function toggleAgeFields() {
+                        const singleAgeOption = document.getElementById('age-single');
+                        const rangeAgeOption = document.getElementById('age-range');
+                        const singleAgeField = document.getElementById('single-age-field');
+                        const rangeAgeField = document.getElementById('range-age-field');
+
+                        if (singleAgeOption.checked) {
+                            singleAgeField.classList.remove('hidden');
+                            rangeAgeField.classList.add('hidden');
+                            document.getElementById('age_range').value = "";
+                        } else if (rangeAgeOption.checked) {
+                            singleAgeField.classList.add('hidden');
+                            rangeAgeField.classList.remove('hidden');
+                            document.getElementById('age').value = "";
+                        }
+                    }
+                </script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        </head>
+        <body>
+            <!-- Header -->
+            <header class="header">
+                <div class="logo-container">
+                    <i class="fas fa-university logo-icon"></i>
+                    <h1>Excellent Bank</h1>
+                </div>
+                <div class="header-right">
+                    <span class="user-info">
+                        <i class="fas fa-user-circle"></i> {{ username }} ({{ role }})
+                    </span>
+                    <span class="system-time" id="current-time"></span>
+                    <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </header>
+
+            <!-- Navigation -->
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="{{ url_for('add_client') }}"><i class="fas fa-user-plus"></i> Add Client</a></li>
+                    <li><a href="{{ url_for('delete_client') }}"><i class="fas fa-user-minus"></i> Delete Client</a></li>
+                    <li class="active"><a href="{{ url_for('search_client') }}"><i class="fas fa-users"></i> Search Clients</a></li>
+                    <li><a href="{{ url_for('predict') }}"><i class="fas fa-chart-line"></i> Prediction Report</a></li>
+                </ul>
+            </nav>
+
+            <!-- Main Content -->
+        <main class="main-content dashboard">
+            <h2>Bank Data Search Engine</h2>
+            <form action="/search_result" method="get">
+                <!-- Age Selection Section -->
+                <div class="container">
+                    <form action="/search" method="get">
+
+                        <div class="search-section">
+                            <div class="search-section-title">Age Selection</div>
+
+                            <div class="radio-group">
+                                <input type="radio" id="age-single" name="age_type" value="single" checked onclick="toggleAgeFields()">
+                                <label for="age-single" class="radio-label">Single Age</label>
+
+                                <input type="radio" id="age-range" name="age_type" value="range" onclick="toggleAgeFields()">
+                                <label for="age-range" class="radio-label">Age Range</label>
+                            </div>
+
+                            <div id="single-age-field">
+                                <label for="age">Specific Age:</label>
+                                <input type="number" id="age" name="age" placeholder="Enter age">
+                            </div>
+
+                            <div id="range-age-field" class="hidden">
+                                <label for="age_range">Age Range:</label>
+                                <select id="age_range" name="age_range">
+                                    <option value="">Select age range</option>
+                                    {% for range in age_ranges %}
+                                        <option value={{range}}>{{range}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="search-section">
+                            <div class="search-section-title">Other Filters</div>
+                            <label for="job">Job:</label>
+                            <select id="job" name="job">
+                                <option value="">Select a job</option>
+                                {% for job in job_options %}
+                                        <option value={{job}}>{{job}}</option>
+                                {% endfor %}
+                            </select>
+
+                            <label for="marital">Marital Status:</label>
+                            <!--<select id="marital" name="marital">
+                                <option value="">Select marital status</option>
+                                {"".join(f'<option value="{marital}">{marital}</option>' for marital in marital_options)}
+                            </select>-->
+
+                            <label for="education">Education:</label>
+                            <!--<select id="education" name="education">
+                                <option value="">Select education</option>
+                                {"".join(f'<option value="{education}">{education}</option>' for education in education_options)}
+                            </select>-->
+
+                            <label for="loan">Loan:</label>
+                            <!--<select id="loan" name="loan">
+                                <option value="">Select loan</option>
+                                {"".join(f'<option value="{loan}">{loan}</option>' for loan in loan_options)}
+                            </select>-->
+
+                            <label for="housing">Housing:</label>
+                            <!--<select id="housing" name="housing">
+                                <option value="">Select housing</option>
+                                {"".join(f'<option value="{housing}">{housing}</option>' for housing in housing_options)}
+                            </select>-->
+
+                            <label for="month">Month:</label>
+                            <!--<select id="month" name="month">
+                                <option value="">Select month</option>
+                                {"".join(f'<option value="{month}">{month}</option>' for month in month_options)}
+                            </select>-->
+                        </div>
+                    </form>
+                </div>
+            </form>
+
+                <!-- Submit Button -->
+                <div class="container">
+                    <div class="col">
+                        <button type="submit">
+                        <a href="/result_search_client" class="btn btn-primary">View Results</a>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </main>
+        <div class="search-results" id="searchResults" style="display: none;">
+            <div class="container">
+                <h2>Search Results</h2>
+                <div class="graph-container">
+                    <div class="graph">
+                        <img src="data:image/png;base64,{graph_url}" alt="Client Balances and Deposit Distribution">
+                    </div>
+                </div>
+                <div class="statement" style="white-space: pre-line;">
+                    {statement}
+                </div>
+
+                <div id="tableContainer">
+                    <div class="row-count">Showing <span id="visibleRows">10</span> of {total_rows} records</div>
+                    {data_html}
+
+                    <button id="showMoreBtn" class="show-more-btn">Show More</button>
+                </div>
+            </div>
+        </div>
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <p>&copy; 2025 Excellent Bank Administration System. All rights reserved.</p>
+                    </div>
+                    <div class="footer-section">
+                        <p><i class="fas fa-shield-alt"></i> Protected by enterprise-grade security</p>
+                    </div>
+                    <div class="footer-section links">
+                        <a href="#">Privacy Policy</a> |
+                        <a href="#">Terms of Service</a> |
+                        <a href="#">Contact IT Support</a>
+                    </div>
+                </div>
+            </footer>
+        </body>
+        </html>
